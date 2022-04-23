@@ -17,3 +17,6 @@ Rails:
   Enabled: true
 RSpec:
   Enabled: true
+
+RSpec/MultipleExpectations:
+  Max: 5
