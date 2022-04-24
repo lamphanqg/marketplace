@@ -25,6 +25,18 @@ RSpec.describe User, type: :model do
     expect(user.errors[:email]).to include("has already been taken")
   end
 
+  it "is invalid with negative point" do
+    user = described_class.new(email: "test@example.com", password: "Test12345", point: -1)
+    user.valid?
+    expect(user.errors[:point]).to include("must be greater than or equal to 0")
+  end
+
+  it "is invalid with decimal point" do
+    user = described_class.new(email: "test@example.com", password: "Test12345", point: 100.5)
+    user.valid?
+    expect(user.errors[:point]).to include("must be an integer")
+  end
+
   it "has 10,000 point as default" do
     user = described_class.new(email: "test@example.com", password: "Test12345")
     expect(user.point).to eq(10_000)

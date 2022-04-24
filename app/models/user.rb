@@ -4,6 +4,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true,
     format: {with: URI::MailTo::EMAIL_REGEXP}
   validates :password, presence: true
+  validates :point, numericality: {only_integer: true, greater_than_or_equal_to: 0}
 
   def as_json(options = {})
     excluding = [options[:except]].flatten.compact.union([:password_digest])
