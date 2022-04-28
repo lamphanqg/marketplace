@@ -3,13 +3,19 @@ require "contexts/login"
 require "examples/authenticate"
 
 RSpec.describe "V1::Users", type: :request do
+  let(:user) { User.create!(email: "test@example.com", password: "Test12345") }
+
   describe "GET /v1/users" do
     let(:path) { "/v1/users" }
 
     context "with authenticated user" do
-      include_context "when logged in"
+      include_context "when logged in" do
+        let(:email) { "test@example.com" }
+        let(:password) { "Test12345" }
+      end
 
       it "returns user list" do
+        user
         get path, headers: {"Authorization" => login_token}
         user_ids = JSON.parse(response.body).map { |user| user["id"] }
         expect(user_ids).to eq(User.order(:id).ids)
@@ -24,11 +30,13 @@ RSpec.describe "V1::Users", type: :request do
   end
 
   describe "GET /v1/users/:id" do
-    let(:user) { User.create!(email: "test@example.com", password: "Test12345") }
     let(:path) { "/v1/users/#{user.id}" }
 
     context "with authenticated user" do
-      include_context "when logged in"
+      include_context "when logged in" do
+        let(:email) { "test@example.com" }
+        let(:password) { "Test12345" }
+      end
 
       it "returns user" do
         get path, headers: {"Authorization" => login_token}

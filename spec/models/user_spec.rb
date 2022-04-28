@@ -42,6 +42,13 @@ RSpec.describe User, type: :model do
     expect(user.point).to eq(10_000)
   end
 
+  it "destroy products when destroyed" do
+    user = described_class.create!(email: "test@example.com", password: "Test12345")
+    product = user.products.create!(name: "product 1", price: 500, quantity: 1)
+    user.destroy!
+    expect(Product.find_by(id: product.id)).to be_nil
+  end
+
   describe "#as_json" do
     it "does not include password_digest" do
       user = described_class.new(email: "test@example.com", password: "Test12345")
