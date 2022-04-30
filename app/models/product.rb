@@ -1,6 +1,8 @@
 class Product < ApplicationRecord
   belongs_to :seller, class_name: "User", inverse_of: :products
 
+  has_many :purchases, dependent: :nullify
+
   validates :name, presence: true
   validates :quantity, :price, presence: true,
     numericality: {only_integer: true, greater_than_or_equal_to: 0}

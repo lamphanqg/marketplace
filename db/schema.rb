@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_23_233450) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_28_133048) do
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.integer "quantity", null: false
@@ -20,6 +20,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_23_233450) do
     t.datetime "updated_at", null: false
     t.index ["price"], name: "index_products_on_price"
     t.index ["seller_id"], name: "index_products_on_seller_id"
+  end
+
+  create_table "purchases", charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
+    t.bigint "product_id"
+    t.string "product_name", null: false
+    t.integer "price", null: false
+    t.integer "quantity", null: false
+    t.bigint "seller_id", null: false
+    t.bigint "buyer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buyer_id"], name: "index_purchases_on_buyer_id"
+    t.index ["product_id"], name: "index_purchases_on_product_id"
+    t.index ["seller_id"], name: "index_purchases_on_seller_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
@@ -32,4 +46,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_23_233450) do
   end
 
   add_foreign_key "products", "users", column: "seller_id"
+  add_foreign_key "purchases", "users", column: "buyer_id"
+  add_foreign_key "purchases", "users", column: "seller_id"
 end

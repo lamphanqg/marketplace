@@ -8,6 +8,10 @@ class User < ApplicationRecord
 
   has_many :products, dependent: :destroy,
     inverse_of: :seller, foreign_key: :seller_id
+  has_many :sold_purchases, class_name: "Purchase", dependent: :nullify,
+    inverse_of: :seller, foreign_key: :seller_id
+  has_many :bought_purchases, class_name: "Purchase", dependent: :destroy,
+    inverse_of: :buyer, foreign_key: :buyer_id
 
   def as_json(options = {})
     excluding = [options[:except]].flatten.compact.union([:password_digest])
