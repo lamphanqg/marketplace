@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       end
     end
     get "my_products", to: "products#my_products"
+    get "my_purchases", to: "purchases#my_purchases"
 
     resources :users
     post "/login", to: "authentication#login"

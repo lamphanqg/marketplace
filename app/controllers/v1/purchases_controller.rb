@@ -20,4 +20,9 @@ class V1::PurchasesController < ApplicationController
       render json: {errors: e.record.errors}, status: :unprocessable_entity
     end
   end
+
+  def my_purchases
+    purchases = @current_user.bought_purchases.order(created_at: :desc)
+    render json: purchases, status: :ok
+  end
 end
