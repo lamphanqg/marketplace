@@ -4,8 +4,8 @@ class V1::ProductsController < ApplicationController
 
   # GET /v1/products
   def index
-    products = Product.order(:price)
-    render json: products, status: :ok
+    products = Product.order(:price).page(params[:page]).per(params[:per_page])
+    render json: {products: products, total_pages: products.total_pages, total: products.total_count}, status: :ok
   end
 
   # GET /v1/products/:id

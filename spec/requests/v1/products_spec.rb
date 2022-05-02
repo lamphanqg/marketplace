@@ -20,7 +20,28 @@ RSpec.describe "V1::Products", type: :request do
       products_by_price = products.sort_by { |prod| prod.price }
       get "/v1/products"
       expect(response).to have_http_status(:ok)
-      expect(json.map { |product| product["id"] }).to eq(products_by_price.map(&:id))
+      expect(json["products"].map { |product| product["id"] }).to eq(products_by_price.map(&:id))
+    end
+
+    context "when there are many products" do
+      before do
+        30.times do |i|
+          Product.create!(name: "product #{i}", seller: sellers.sample, price: rand(10_000), quantity: rand(100))
+        end
+      end
+
+      it "returns 25 products as default" do
+        get "/v1/products"
+        expect(json["products"].size).to eq(25)
+        expect(json["total"]).to eq(Product.count)
+        expect(json["total_pages"]).to eq(Product.count / 25 + 1)
+      end
+
+      it "returns correct products by page and per_page" do
+        get "/v1/products", params: {page: 2, per_page: 5}
+        expect(json["products"]).to eq(Product.order(:price).offset(5).limit(5).as_json)
+        expect(json["total_pages"]).to eq((Product.count / 5.0).ceil)
+      end
     end
   end
 
