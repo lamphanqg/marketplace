@@ -63,14 +63,6 @@ RSpec.describe Purchase, type: :model do
     expect(purchase.errors[:seller]).to include("can't be buyer")
   end
 
-  it "is invalid with quantity greater than product's quantity" do
-    base_attrs[:quantity] = product.quantity + 1
-    base_attrs[:product] = product
-    purchase = described_class.new(base_attrs)
-    purchase.valid?
-    expect(purchase.errors[:quantity]).to include("can't be more than product's quantity")
-  end
-
   def test_presence(attr)
     purchase = setup_object_except(attr)
     purchase.valid?

@@ -1,23 +1,11 @@
 class V1::PurchasesController < ApplicationController
   def create
     product = Product.find(params[:product_id])
-
-    begin
-      ActiveRecord::Base.transaction do
-        purchase = Purchase.create!(
-          product: product,
-          product_name: product.name,
-          quantity: params[:quantity].to_i,
-          price: product.price,
-          buyer: @current_user,
-          seller: product.seller
-        )
-        product.lock!
-        product.update!(quantity: product.quantity - params[:quantity].to_i)
-        render json: purchase, status: :created
-      end
-    rescue ActiveRecord::RecordInvalid => e
-      render json: {errors: e.record.errors}, status: :unprocessable_entity
+    purchase_form = PurchaseForm.new(@current_user, product, params[:quantity].to_i)
+    if (purchase = purchase_form.save)
+      render json: purchase, status: :created
+    else
+      render json: {errors: purchase_form.errors}, status: :unprocessable_entity
     end
   end
 

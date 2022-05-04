@@ -23,12 +23,9 @@ RSpec.describe "V1::Purchases", type: :request do
           post "/v1/purchases", headers: {"Authorization" => login_token},
             params: {product_id: product.id, quantity: 2}
           expect(response).to have_http_status(:created)
-          expect(Purchase.count).to be(old_purchase_count + 1)
+          expect(Purchase.count).to eq(old_purchase_count + 1)
           expect(product.reload.quantity).to be(old_product_quantity - 2)
         end
-
-        # TODO
-        it "uses pessimistic lock for product quantity"
       end
 
       it "return error when data is invalid" do
