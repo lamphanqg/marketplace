@@ -1,24 +1,20 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 開発環境構築
 
-Things you may want to cover:
+* Dockerイメージをビルドして、bundle installする
 
-* Ruby version
+```
+docker-compose build
+docker-compose run --rm rails bundle install
+```
 
-* System dependencies
+* サーバーを起動する（ポート3000で起動する）
 
-* Configuration
+```
+docker-compose run --rm --service-ports
+```
 
-* Database creation
+## POSTMAN document
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+https://documenter.getpostman.com/view/107551/Uyxbq9Rf
