@@ -9,6 +9,12 @@ docker-compose build
 docker-compose run --rm rails bundle install
 ```
 
+* データーベースを作成する
+
+```
+docker-compose run --rm rails bundle exec rails db:create db:migrate
+```
+
 * サーバーを起動する（ポート3000で起動する）
 
 ```
